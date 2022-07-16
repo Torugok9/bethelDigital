@@ -1,10 +1,10 @@
 import React from 'react';
 import Header from '../../component/header'
 import { AppBar, Toolbar, Typography, makeStyles, Container, Card, Button } from "@material-ui/core";
-
+import seta from '../../img/arrow-right.svg'
 
 export default function DashBoard() {
-    const { container, bgImage, position, titulo, subTitle, button } = useStyles();
+    const { container, bgImage, position, titulo, subTitle, button, svg } = useStyles();
 
     return (
         <div className={container}>
@@ -14,9 +14,9 @@ export default function DashBoard() {
                     <h1 className={titulo}>Faça parte desse ministério</h1>
 
                     <p className={subTitle}>Sinta a presença de Deus on-line <br/> ou presencialmente em nossos cultos</p>
-                    <Button className={button}>Vá até uma igreja Bethel -></Button>
+                    <Button className={button}>Vá até uma igreja Bethel <embed className={svg} src={seta}/></Button>
                     <br/>
-                    <Button className={button}>Assista nossos cultos -></Button>
+                    <Button className={button}>Assista nossos cultos <embed className={svg} src={seta}/></Button>
                 </div>
         </div>
 
@@ -46,7 +46,7 @@ const useStyles = makeStyles(() => ({
         marginTop: 290,
     },
     subTitle: {
-        color: '#e9e9e9',
+        color: 'white',
         fontSize: 32,
         fontFamily: 'Inter  ,sans-serif',
         fontWeight: '100',
@@ -57,5 +57,8 @@ const useStyles = makeStyles(() => ({
         borderRadius: 13,
         marginTop: 30,
         padding: 10
+    },
+    svg: {
+        color: 'white'
     }
 }));
