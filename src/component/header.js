@@ -1,7 +1,8 @@
-import { AppBar, Toolbar, Typography, makeStyles, Button } from "@material-ui/core";
-import React from "react";
+import { AppBar, Toolbar, Typography, makeStyles, Button, Drawer, MenuItem, Link } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
-
+import MenuIcon from "@material-ui/icons/Menu"
+import { IconButton } from "@material-ui/core"
 
 const headersData = [
     {
@@ -17,6 +18,10 @@ const headersData = [
         href: "/account",
     },
     {
+        label: 'Peça Oração',
+        href: '/blessed'
+    },
+    {
         label: "Eventos",
         href: "/logout",
     },
@@ -29,20 +34,25 @@ const headersData = [
 const useStyles = makeStyles(() => ({
     header: {
         backgroundColor: "#256eeb",
-        paddingBottom: 24,
-        paddingTop: 12,
+        paddingBottom: 10,
+        paddingTop: 10,
+        " @media (max-width: 900px)": {
+            paddingLeft: 0,
+        },
     },
     logo: {
-        height: 57,
-        width: 227,
-        marginLeft: 70,
+        marginLeft: 100,
         marginRight: 89
+    },
+    logoImage: {
+        marginTop: 10,
+        height: "auto",
+        width: "80%",
     },
     menuButton: {
         fontFamily: "Inter, sans-serif",
         fontWeight: 700,
-        size: "16px",
-        marginLeft: "60px",
+        size: "14px",
     },
     toolbar: {
         display: "flex",
@@ -52,7 +62,29 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function Header() {
-    const { header, logo, menuButton, toolbar } = useStyles();
+    const [state, setState] = useState({
+        mobileView: false,
+        drawerOpen: false
+    })
+
+    const { mobileView, drawerOpen } = state
+
+    const { header, logo, logoImage, menuButton, toolbar } = useStyles();
+
+    useEffect(() => {
+        const setResponsiveness = () => {
+            return window.innerWidth < 900
+                ? setState((prevState) => ({ ...prevState, mobileView: true }))
+                : setState((prevState) => ({ ...prevState, mobileView: false }))
+        }
+
+        setResponsiveness();
+        window.addEventListener("resize", () => setResponsiveness())
+
+        return () => {
+            window.removeEventListener("resize", () => setResponsiveness())
+        }
+    }, [])
 
     const displayDesktop = () => {
         return <Toolbar className={toolbar}>{femmecubatorLogo}
@@ -62,7 +94,7 @@ export default function Header() {
 
     const femmecubatorLogo = (
         <Typography variant="h6" component="h1" className={logo}>
-            <img alt='ssss' src={require('../img/bethelLogo.png')} />
+            <img className={logoImage} alt='ssss' src={require('../img/bethelLogo.png')} />
         </Typography>
     );
 
@@ -84,9 +116,60 @@ export default function Header() {
         });
     };
 
+    const displayMobile = () => {
+        const handleDrawerOpen = () =>
+            setState((prevState) => ({ ...prevState, drawerOpen: true }));
+        const handleDrawerClose = () =>
+            setState((prevState) => ({ ...prevState, drawerOpen: false }));
+        return (
+            <Toolbar>
+                <IconButton
+                    {...{
+                        edge: "start",
+                        color: "inherit",
+                        "aria-label": "menu",
+                        "aria-haspopup": "true",
+                        onClick: handleDrawerOpen,
+                    }}
+                >
+                    <MenuIcon />
+                </IconButton>
+                <Drawer
+                    {...{
+                        anchor: 'left',
+                        open: drawerOpen,
+                        onClose: handleDrawerClose,
+                    }}>
+                        <div>{getDrawerChoices()}</div>
+                    </Drawer>
+                <div>{femmecubatorLogo}</div>
+            </Toolbar>
+        );
+    };
+
+    const getDrawerChoices = () => {
+        return headersData.map(({label, href}) => {
+            return (
+                <Link 
+                    {...{
+                        component: RouterLink,
+                        to: href,
+                        color: "inherit",
+                        style: { textDecoration: "none"},
+                        key: label,
+                    }}
+                >
+                    <MenuItem>{label}</MenuItem>
+                </Link>
+            )
+        })
+    }
+
+
     return (
         <header>
-            <AppBar className={header}>{displayDesktop()}</AppBar>
-        </header>
-    );
+            <AppBar className={header}>
+                {mobileView ? displayMobile() : displayDesktop()}
+            </AppBar>
+        </header>);
 }
