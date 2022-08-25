@@ -2,30 +2,34 @@ import React from 'react';
 import Header from '../../component/header'
 import { makeStyles, Button, Card, CardMedia } from "@material-ui/core";
 import seta from '../../img/arrow-right.svg'
+import Footer from '../../component/footer';
 
 export default function DashBoard() {
-    const { container, cardContainer, bgImage, position, titulo, subTitle, button, svg, textButton } = useStyles();
+    const { container, cardContainer, bgImage, position, titulo, subTitle, button, svg, textButton, body } = useStyles();
 
     return (
         <div className={container}>
-            <div>
-                <Header />
-            </div>
-            <Card className={cardContainer}>
-                {/* <video className={bgImage} autoPlay loop muted>
-                    <source src={require('../../video/adoracao.mp4')} type='video/mp4'/>
-                </video> */}
-                <CardMedia className={bgImage} component="video" alt="video" src={require('../../video/adoracao.mp4')} title="video"
-                    type="video/mp4" muted autoPlay loop />
-                <div className={position}>
-                    <h1 className={titulo}>Faça parte desse ministério</h1>
-
-                    <p className={subTitle}>Sinta a presença de Deus on-line <br /> ou presencialmente em nossos cultos</p>
-                    <Button className={button}><p className={textButton}>Vá até uma igreja Bethel</p><embed className={svg} src={seta} /></Button>
-                    <br />
-                    <Button className={button}><p className={textButton}>Assista nossos cultos</p> <embed className={svg} src={seta} /></Button>
+            <div className={body}>
+                <div>
+                    <Header />
                 </div>
-            </Card>
+                <Card className={cardContainer}>
+                    <CardMedia className={bgImage} component="video" alt="video" src={require('../../video/adoracao.mp4')} title="video"
+                        type="video/mp4" muted autoPlay loop />
+                    <div className={position}>
+                        <h1 className={titulo}>Faça parte desse ministério</h1>
+
+                        <p className={subTitle}>Sinta a presença de Deus on-line <br /> ou presencialmente em nossos cultos</p>
+                        <Button className={button}><p className={textButton}>Vá até uma igreja Bethel</p><embed className={svg} src={seta} /></Button>
+                        <br />
+                        <Button className={button}><p className={textButton}>Assista nossos cultos</p> <embed className={svg} src={seta} /></Button>
+                    </div>
+                </Card>
+                <div>
+                    <Footer />
+                </div>
+            </div>
+
         </div>
 
     )
@@ -33,8 +37,11 @@ export default function DashBoard() {
 
 const useStyles = makeStyles(() => ({
     container: {
+        display: 'flex',
+        flexDirection: 'column',
         padding: 0,
         margin: 0,
+        height: '100%'
     },
     bgImage: {
         height: 'auto',
@@ -94,5 +101,8 @@ const useStyles = makeStyles(() => ({
     },
     cardContainer: {
         height: "100%"
+    },
+    body:{
+        paddingBottom:'100px'
     }
 }));
